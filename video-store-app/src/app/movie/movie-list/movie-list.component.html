@@ -1,0 +1,43 @@
+<div class="container">
+    <br>
+    <br>
+    <h2>Movie List</h2>
+    <br>
+    <br>
+    <div>
+        <a class="btn btn-primary" style="color: black; font-weight: bold" href="addMovie">Add new movie</a>
+        <a class="btn btn-primary" style="color: black; font-weight: bold; margin: 0 15px;"  (click)="listRentalMovie()">List rental movie</a>
+    </div>
+    <br>
+    <br>
+    <div>
+        <form class="form-inline" (submit)="doSearch()">
+            <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search by Genre" [(ngModel)]="search" aria-label="Pesquisar">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search by Genre</button>
+        </form>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <div *ngFor="let movie of movies"  class="col-sm-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <p *ngIf="!movie.isAvailable" style="border-color: red; border-width:2px; border-style:solid; text-align: center; ">Not available</p>
+                    <h5 class="card-title">Title: {{movie.title}}</h5>
+                    <p class="card-text">Director: {{movie.director}}</p>
+                    <p class="card-text">Year: {{movie.year}}</p>
+                    <p class="card-text">Genre: {{movie.genre}}</p>
+                    <button class="btn btn-success" (click)="update(movie.id)">
+                        Edit
+                    </button>
+                    <button style="margin: 0 15px" class="btn btn-danger" (click)="delete(movie.id)">
+                        Delete
+                    </button>
+                    <button *ngIf="movie.isAvailable" class="btn btn-info" (click)="rent(movie.id)">
+                        Rent
+                    </button>
+                </div>
+            </div>     
+        </div>
+    </div>
+</div>

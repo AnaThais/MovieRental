@@ -1,0 +1,56 @@
+<div class="container">
+    <br>
+    <br>
+        <div class="row">
+            <div class="col-sm-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Title: {{movie.title}}</h5>
+                        <p class="card-text">Director: {{movie.director}}</p>
+                        <p class="card-text">Year: {{movie.year}}</p>
+                        <p class="card-text">Genre: {{movie.genre}}</p>
+                    </div>
+                </div>     
+            </div>
+        </div>
+        <ng-template #content let-c="close" let-d="dismiss" ngNativeValidate>
+            <div class="modal-header">
+                <div class="form-group row">
+                    <label for="example-date-input" class="col-6 col-form-label">Select end date</label>
+                    <div class="col-12">
+                        <input class="form-control" type="date" (input)="parseDate($event.target.value)" required/>
+                    </div>
+                </div>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <br>
+            <h5 style="margin: 0 15px">Select client</h5>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let client of clients">
+                                <td>{{client.name}}</td>
+                                <td>{{client.email}}</td>
+                                <td>
+                                    <button class="btn btn-success" (click)="c('Save click')" (click)="selectClient(client.id, movie.id)">
+                                        Select
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </ng-template>       
+        <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Select client</button>         
+</div>
