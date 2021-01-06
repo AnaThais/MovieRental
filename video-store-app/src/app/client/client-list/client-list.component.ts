@@ -11,7 +11,8 @@ import { ClientService } from 'src/app/services/client.service';
 export class ClientListComponent implements OnInit {
 
   clients: Client[] = [];
-  
+  isEmpty = true;
+
   constructor(
     private clientService: ClientService,
     private router: Router
@@ -33,9 +34,15 @@ export class ClientListComponent implements OnInit {
   }
 
   loadClients(){
+    this.isEmpty = false;
     this.clientService.list().subscribe(result => {
       this.clients = result
-      console.log(result);
+      if(this.clients.length > 0){
+        this.isEmpty = false;
+      }
+      else{
+        this.isEmpty = true;
+      }
     });
   }
 }

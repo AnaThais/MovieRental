@@ -10,6 +10,7 @@ import { RegisterService } from 'src/app/services/register.service';
 export class RegisterListComponent implements OnInit {
 
   registers: Register[] = [];
+  isEmpty = true;
   constructor(
     private registerService: RegisterService
   ) { }
@@ -21,6 +22,12 @@ export class RegisterListComponent implements OnInit {
   loadRegister(){
     this.registerService.list().subscribe(result => {
       this.registers = result
+      if(this.registers.length > 0){
+        this.isEmpty = false;
+      }
+      else{
+        this.isEmpty = true;
+      }
     });
   }
 }

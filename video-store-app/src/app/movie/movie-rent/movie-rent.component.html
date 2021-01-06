@@ -52,5 +52,5 @@
                 </div>
             </div>
         </ng-template>       
-        <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Select client</button>         
+        <button *ngIf="isAvailable" class="btn btn-lg btn-outline-primary" (click)="open(content)">Select client</button>         
 </div>

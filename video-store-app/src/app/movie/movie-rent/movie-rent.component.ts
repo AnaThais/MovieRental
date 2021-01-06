@@ -21,6 +21,7 @@ export class MovieRentComponent implements OnInit {
   clients: Client[] = [];
   dateString: string;
   register = new Register;
+  isAvailable = true;
   
     constructor(    
       private movieService: MovieService,
@@ -28,7 +29,6 @@ export class MovieRentComponent implements OnInit {
       private registerService: RegisterService,
       private route: ActivatedRoute,
       private router: Router,
-      private config: NgbModalConfig,
       private modalService: NgbModal
     ) { }
 
@@ -38,6 +38,12 @@ export class MovieRentComponent implements OnInit {
     this.route.params.subscribe(result => {     
       this.movieService.findById(result.id).subscribe(result => {
         this.movie = result;
+        if(this.movie.isAvailable === false) {
+          this.isAvailable = false;
+        }
+        else {
+          this.isAvailable = true;
+        }
       });
     });
 
@@ -64,6 +70,8 @@ export class MovieRentComponent implements OnInit {
     this.movieService.update(this.movie).subscribe(result => {
         console.log(result);
     });
+
+    this.isAvailable = false;
   }
 
   parseDate(dateString: string): Date {

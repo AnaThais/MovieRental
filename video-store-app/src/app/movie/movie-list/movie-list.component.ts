@@ -36,7 +36,7 @@ export class MovieListComponent implements OnInit {
     this.router.navigate(['/editMovie/' + id]);
   }
 
-  loadMovies(){
+  public loadMovies(){
     this.movieService.list().subscribe(result => {
       this.movies = result
       console.log(this.movies);
