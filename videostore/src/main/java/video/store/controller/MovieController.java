@@ -1,6 +1,5 @@
 package video.store.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import video.store.model.Movie;
-import video.store.model.Register;
-import video.store.repository.MovieRepository;
-import video.store.repository.RegisterRepository;
+import video.store.service.MovieService;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -26,67 +23,41 @@ import video.store.repository.RegisterRepository;
 public class MovieController {
 
 	@Autowired
-	MovieRepository repo;
-
-	@Autowired
-	RegisterRepository registerRepo;
+	MovieService movieService;
 
 	@PostMapping(path = "/addMovie")
 	public @ResponseBody void addMovie(@RequestBody final Movie movie) {
 
-		movie.setIsAvailable(true);
-		repo.save(movie);
+		movieService.addMovie(movie);
 	}
 
 	@GetMapping(path = "/findById/{id}")
 	public @ResponseBody Movie findById(@PathVariable final Integer id) {
 
-		return repo.findById(id).get();
+		return movieService.findById(id);
 	}
 
 	@GetMapping(path = "/findByGenre/{genre}")
 	public @ResponseBody List<Movie> findByGenre(@PathVariable final String genre) {
 
-		return repo.findByGenre(genre);
+		return movieService.findByGenre(genre);
 	}
 
 	@GetMapping(path = "/findAll")
 	public @ResponseBody Iterable<Movie> findAll() {
 
-		final Iterable<Movie> movies = repo.findAll();
-		if (movies != null) {
-			movies.forEach(movie -> {
-
-				if (!movie.getIsAvailable()) {
-
-					final List<Register> registers = registerRepo.findByMovie(movie);
-					if (registers != null) {
-
-						registers.forEach(register -> {
-							final Date currentDate = new Date();
-
-							if (register.getEndDate().before(currentDate)) {
-								movie.setIsAvailable(true);
-							}
-						});
-					}
-				}
-			});
-		}
-
-		return movies;
+		return movieService.findAll();
 	}
 
 	@PutMapping(path = "/updateMovie")
 	public @ResponseBody void updateMovie(@RequestBody final Movie movie) {
 
-		repo.save(movie);
+		movieService.updateMovie(movie);
 	}
 
 	@DeleteMapping(path = "/deleteMovie/{id}")
 	public @ResponseBody void deleteMovie(@PathVariable final Integer id) {
 
-		repo.deleteById(id);
+		movieService.deleteMovie(id);
 	}
-
 }

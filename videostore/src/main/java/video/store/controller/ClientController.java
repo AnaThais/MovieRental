@@ -1,8 +1,6 @@
 package video.store.controller;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,11 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import video.store.model.Client;
-import video.store.model.Movie;
-import video.store.model.Register;
-import video.store.repository.ClientRepository;
-import video.store.repository.MovieRepository;
-import video.store.repository.RegisterRepository;
+import video.store.service.ClientService;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -29,64 +23,35 @@ import video.store.repository.RegisterRepository;
 public class ClientController {
 
 	@Autowired
-	ClientRepository repo;
-
-	@Autowired
-	RegisterRepository registerRepo;
-
-	@Autowired
-	MovieRepository movieRepo;
+	ClientService clientService;
 
 	@PostMapping(path = "/addClient")
 	public @ResponseBody void addClient(@RequestBody final Client client) {
 
-		repo.save(client);
+		clientService.addClient(client);
 	}
 
 	@GetMapping(path = "/findById/{id}")
 	public @ResponseBody Client findById(@PathVariable final Integer id) {
 
-		if (repo.findById(id).isPresent()) {
-			return repo.findById(id).get();
-		}
-
-		return null;
+		return clientService.findById(id);
 	}
 
 	@GetMapping(path = "/findAll")
 	public @ResponseBody List<Client> findAll() {
 
-		return (List<Client>) repo.findAll();
+		return clientService.findAll();
 	}
 
 	@PutMapping(path = "/updateClient")
 	public @ResponseBody void updateClient(@RequestBody final Client client) {
 
-		repo.save(client);
+		clientService.updateClient(client);
 	}
 
 	@DeleteMapping(path = "/deleteClient/{id}")
 	public @ResponseBody void deleteClient(@PathVariable final Integer id) {
 
-		final Client client = new Client();
-		client.setId(id);
-
-		final List<Register> registers = registerRepo.findByClient(client);
-		if (registers != null) {
-			registers.forEach(register -> {
-				final Date currentDate = new Date();
-
-				if (register.getEndDate().after(currentDate)) {
-					final Optional<Movie> movie = movieRepo.findById(register.getMovie().getId());
-					if (movie.isPresent()) {
-						movie.get().setIsAvailable(true);
-
-						movieRepo.save(movie.get());
-					}
-				}
-			});
-		}
-
-		repo.deleteById(id);
+		clientService.deleteClient(id);
 	}
 }

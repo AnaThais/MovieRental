@@ -1,7 +1,5 @@
 package video.store.controller;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import video.store.model.Register;
-import video.store.repository.RegisterRepository;
+import video.store.service.RegisterService;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -23,36 +21,35 @@ import video.store.repository.RegisterRepository;
 public class RegisterController {
 
 	@Autowired
-	RegisterRepository repo;
+	RegisterService registerService;
 
 	@PostMapping(path = "/addRegister")
 	public @ResponseBody void addRegister(@RequestBody final Register register) {
 
-		register.setStartDate(new Date());
-		repo.save(register);
+		registerService.addRegister(register);
 	}
 
 	@GetMapping(path = "/findById/{id}")
 	public @ResponseBody Register findbyId(@PathVariable final Integer id) {
 
-		return repo.findById(id).get();
+		return registerService.findById(id);
 	}
 
 	@GetMapping(path = "/findAll")
 	public @ResponseBody Iterable<Register> findAll() {
 
-		return repo.findAll();
+		return registerService.findAll();
 	}
 
 	@PutMapping(path = "/updateRegister")
 	public @ResponseBody void updateRegister(@RequestBody final Register register) {
 
-		repo.save(register);
+		registerService.updateRegister(register);
 	}
 
 	@DeleteMapping(path = "/deleteRegister/{id}")
 	public @ResponseBody void deleteRegister(@PathVariable final Integer id) {
 
-		repo.deleteById(id);
+		registerService.deleteRegister(id);
 	}
 }
